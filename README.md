@@ -21,9 +21,7 @@ REST API для управления пользователями и детал�
 ### 🚀 Запуск проекта
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/your-repo/user-management-api.git
-   cd user-management-api
-text
-mvn test
+   git clone https://github.com/Azarenock/telros.git
+   
 Postman коллекция
 Коллекция Postman для тестирования API находится в корне проекта в файле UserAPI.postman_collection.json. Импортируйте этот файл в Postman для удобного тестирования всех endpoints.
