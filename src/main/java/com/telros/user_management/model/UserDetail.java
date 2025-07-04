@@ -1,6 +1,7 @@
 package com.telros.user_management.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,8 @@ public class UserDetail {
   private String jobTitle;
   private String department;
 
+  @Column(nullable = false, columnDefinition = "boolean default true")
+  private boolean isActive = true;
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "user_id")
   private User user;
@@ -76,6 +79,14 @@ public class UserDetail {
     this.user = user;
   }
 
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    isActive = active;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -85,14 +96,15 @@ public class UserDetail {
       return false;
     }
     UserDetail that = (UserDetail) o;
-    return Objects.equals(id, that.id) && Objects.equals(address, that.address)
-        && Objects.equals(jobTitle, that.jobTitle) && Objects.equals(department,
-        that.department) && Objects.equals(user, that.user);
+    return isActive == that.isActive && Objects.equals(id, that.id)
+        && Objects.equals(address, that.address) && Objects.equals(jobTitle,
+        that.jobTitle) && Objects.equals(department, that.department)
+        && Objects.equals(user, that.user);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, address, jobTitle, department, user);
+    return Objects.hash(id, address, jobTitle, department, isActive, user);
   }
 
   @Override
@@ -102,6 +114,7 @@ public class UserDetail {
         ", address='" + address + '\'' +
         ", jobTitle='" + jobTitle + '\'' +
         ", department='" + department + '\'' +
+        ", isActive=" + isActive +
         ", user=" + user +
         '}';
   }

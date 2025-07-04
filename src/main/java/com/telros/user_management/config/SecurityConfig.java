@@ -1,5 +1,6 @@
 package com.telros.user_management.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,31 +28,31 @@ public class SecurityConfig {
    * @return сконфигурированная цепочка фильтров
    * @throws Exception при ошибках конфигурации
    */
+  @Value("${security.admin.username}")
+  private String adminUsername;
+
+  @Value("${security.admin.password}")
+  private String adminPassword;
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
-        .authorizeHttpRequests((requests) -> requests
+        .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
             .anyRequest().authenticated()
         )
         .httpBasic();
-
     return http.build();
   }
 
-  /**
-   * Создает пользователя в памяти приложения
-   * @return сервис с пользователями
-   */
   @Bean
   public UserDetailsService userDetailsService() {
-    UserDetails user = User.withDefaultPasswordEncoder()
-        .username("admin")
-        .password("admin")
+    UserDetails admin = User.withDefaultPasswordEncoder()
+        .username(adminUsername)
+        .password(adminPassword)
         .roles("ADMIN")
         .build();
-
-    return new InMemoryUserDetailsManager(user);
+    return new InMemoryUserDetailsManager(admin);
   }
 }

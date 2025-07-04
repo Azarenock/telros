@@ -1,6 +1,7 @@
 package com.telros.user_management.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +24,8 @@ public class User {
   private LocalDate birthDate;
   private String email;
   private String phone;
+  @Column(nullable = false, columnDefinition = "boolean default true")
+  private boolean isActive = true;
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private UserDetail userDetail;
 
@@ -96,6 +99,12 @@ public class User {
   public void setPhone(String phone) {
     this.phone = phone;
   }
+  public boolean isActive() {
+    return isActive;
+  }
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -106,16 +115,18 @@ public class User {
       return false;
     }
     User user = (User) o;
-    return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName)
-        && Objects.equals(firstName, user.firstName) && Objects.equals(middleName,
-        user.middleName) && Objects.equals(birthDate, user.birthDate)
-        && Objects.equals(email, user.email) && Objects.equals(phone, user.phone)
-        && Objects.equals(userDetail, user.userDetail);
+    return isActive == user.isActive && Objects.equals(id, user.id)
+        && Objects.equals(lastName, user.lastName) && Objects.equals(firstName,
+        user.firstName) && Objects.equals(middleName, user.middleName)
+        && Objects.equals(birthDate, user.birthDate) && Objects.equals(email,
+        user.email) && Objects.equals(phone, user.phone) && Objects.equals(
+        userDetail, user.userDetail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone, userDetail);
+    return Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone, isActive,
+        userDetail);
   }
 
   @Override
@@ -128,6 +139,7 @@ public class User {
         ", birthDate=" + birthDate +
         ", email='" + email + '\'' +
         ", phone='" + phone + '\'' +
+        ", isActive=" + isActive +
         ", userDetail=" + userDetail +
         '}';
   }
